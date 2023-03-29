@@ -1,6 +1,6 @@
 import falcon
 import jwt
-from server.util.JWTAuth import auth
+from util.JWTAuth import auth
 
 
 class MaimaiInfo:
