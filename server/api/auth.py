@@ -21,20 +21,23 @@ class Auth:
 
         try:
             cur.execute('select rowid, password, is_premium from user where username=?', [username])
-            (rowid, pass_hash, premium) = cur.fetchone()
-
-            print(pass_hash)
-            if password == pass_hash:
-                encoded = jwt.encode({
-                    'sub': username,
-                    'id': rowid,
-                    'premium': premium
-                }, self.secret)
-                resp.text = encoded
-                resp.status = falcon.HTTP_200
-            else:
-                resp.text = 'Password hash mismatched'
+            data = cur.fetchone()
+            if data is None:
+                resp.text = 'NOT EXIST'
                 resp.status = falcon.HTTP_400
+            else:
+                (rowid, pass_hash, premium) = data
+                if password == pass_hash:
+                    encoded = jwt.encode({
+                        'sub': username,
+                        'id': rowid,
+                        'premium': premium
+                    }, self.secret)
+                    resp.text = encoded
+                    resp.status = falcon.HTTP_200
+                else:
+                    resp.text = 'MISMATCH'
+                    resp.status = falcon.HTTP_400
         except sqlite3.Error as err:
             print(err)
             resp.text = err.sqlite_errorname
