@@ -1,12 +1,10 @@
-import json
-
 import falcon.asgi
 import uvicorn
 
-from alive import Alive
-from api.auth import Auth, Register
-from config import ServerConfig
-from api.maimai.MaimaiInfo import MaimaiInfo
+from server.api.alive import Alive
+from server.api.auth import Auth, Register
+from server.config import ServerConfig
+from server.api.maimai.MaimaiInfo import MaimaiInfo
 
 
 def create_app():
@@ -30,4 +28,4 @@ def create_app():
 
 
 if __name__ == "__main__":
-    uvicorn.run(create_app())
+    uvicorn.run(create_app(), host='127.0.0.1')
