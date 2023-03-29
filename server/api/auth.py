@@ -8,8 +8,8 @@ from falcon import *
 class Auth:
     secret = ''
 
-    def __init__(self, secret):
-        self.secret = secret
+    def __init__(self, config):
+        self.secret = config.jwt_secret
 
     async def on_post(self, req, resp):
         payload = await req.media

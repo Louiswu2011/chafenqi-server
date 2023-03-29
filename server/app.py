@@ -5,21 +5,26 @@ import uvicorn
 
 from alive import Alive
 from api.auth import Auth, Register
+from config import ServerConfig
+from api.maimai.MaimaiInfo import MaimaiInfo
 
 
 def create_app():
-    f = open('config.json')
-    data = json.load(f)
-    secret = data['jwt_secret']
+    config = ServerConfig()
 
     alive = Alive()
-    auth = Auth(secret)
+    auth = Auth(config)
     register = Register()
+
+    maiInfo = MaimaiInfo(config)
 
     app = falcon.asgi.App()
     app.add_route("/alive", alive)
+
     app.add_route("/auth", auth)
     app.add_route("/register", register)
+
+    app.add_route("/maimai/info", maiInfo)
 
     return app
 
